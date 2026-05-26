@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:price_pilot/components/AppBar.dart';
-
 import '../components/ActionButton.dart';
+import '../components/Confirmation_Popup.dart';
+import '../components/SlideLeftPopup.dart';
+import 'AddAirport.dart';
+import 'AirportCard.dart';
 import '../components/ReportTable.dart';
 import '../components/dropdown_searchable.dart';
 import 'AirportOverview.dart';
+import 'CompEstablishments.dart';
+import 'RevenueCenter.dart';
 
 void main() {
   runApp(const PricingApp());
@@ -37,8 +43,7 @@ class PricingDashboardScreen extends StatefulWidget {
 }
 
 class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
-  int selectedMenu = 0;
-
+  int selectedMenu = 1;
   final List<MenuModel> menus = [
     MenuModel(Icons.flight, "Airports Overview"),
     MenuModel(Icons.attach_money, "Revenue Centers"),
@@ -48,7 +53,7 @@ class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
   ];
 
   final List<String> pageTitles = [
-    "Airport Overview Dashboard",
+    "Airport Overview",
     "Revenue Centers",
     "Competition Establishments",
     "Pricing Analytics",
@@ -57,6 +62,7 @@ class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var width= MediaQuery.of(context).size.width;
     return Scaffold(
       body: Column(
         children: [
@@ -77,7 +83,7 @@ class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
                 ),
 
                 /// CONTENT
-                pageTitles[selectedMenu]=="Airport Overview Dashboard"?
+                pageTitles[selectedMenu]=="Airport Overview"?
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(24),
@@ -99,11 +105,11 @@ class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
                                         color: Color(0xFF1D4E89),
                                       ),
                                     ),
-                                    SizedBox(height: 8),
+                                    SizedBox(height: 4),
                                     Text(
                                       "Airports Overview",
                                       style: TextStyle(
-                                        fontSize: 42,
+                                        fontSize: 32,
                                         fontWeight: FontWeight.w500,
                                         color: Color(0xFF123D6A),
                                       ),
@@ -127,7 +133,46 @@ class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
                                           vertical: 16,
                                         ),
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        showGeneralDialog(
+                                          context: context,
+                                          barrierDismissible: true,
+                                          barrierLabel: "Popup",
+                                          barrierColor: Colors.black54,
+                                          transitionDuration: const Duration(milliseconds: 350),
+
+                                          pageBuilder: (context, animation, secondaryAnimation) {
+                                            return Center(
+                                              child: ConfirmationPopup(
+                                                onCloseWithoutSaving: () {
+                                                  print("Closed without saving");
+                                                },
+                                                onContinueEditing: () {
+                                                  print("Continue editing");
+                                                },
+                                              ),
+                                            );
+                                          },
+
+                                          transitionBuilder:
+                                              (context, animation, secondaryAnimation, child) {
+                                            final offsetAnimation = Tween<Offset>(
+                                              begin: const Offset(0, -1), // top
+                                              end: Offset.zero, // center
+                                            ).animate(
+                                              CurvedAnimation(
+                                                parent: animation,
+                                                curve: Curves.easeOut,
+                                              ),
+                                            );
+
+                                            return SlideTransition(
+                                              position: offsetAnimation,
+                                              child: child,
+                                            );
+                                          },
+                                        );
+                                      },
                                       icon: const Icon(
                                         Icons.flight,
                                         color: Color(0xFFFF7A1A),
@@ -153,7 +198,41 @@ class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
                                         ),
                                         elevation: 0,
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        SlideLeftPopup.show(
+                                          context,
+                                          content: AddAirport(),
+                                        );
+                                        /* showGeneralDialog(
+                                          context: context,
+                                          barrierDismissible: true,
+                                          barrierLabel: "Popup",
+                                          barrierColor: Colors.black54,
+                                          transitionDuration: const Duration(milliseconds: 350),
+                                          pageBuilder: (_, __, ___) {
+                                            return const Align(
+                                              alignment: Alignment.centerRight,
+                                              child: AddAirport(),
+                                            );
+                                          },
+                                          transitionBuilder: (context, animation, secondaryAnimation, child) {
+                                            final offsetAnimation = Tween<Offset>(
+                                              begin: const Offset(1, 0),
+                                              end: Offset.zero,
+                                            ).animate(
+                                              CurvedAnimation(
+                                                parent: animation,
+                                                curve: Curves.easeOut,
+                                              ),
+                                            );
+
+                                            return SlideTransition(
+                                              position: offsetAnimation,
+                                              child: child,
+                                            );
+                                          },
+                                        );*/
+                                      },
                                       icon: const Icon(Icons.add_circle_outline,color: Colors.white,),
                                       label: const Text(
                                         "Add New",
@@ -166,7 +245,6 @@ class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
                             ),
 
                             const SizedBox(height: 24),
-
                             /// Stats Cards
                             Container(
                               padding: const EdgeInsets.symmetric(vertical: 8),
@@ -220,10 +298,8 @@ class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
                                 ],
                               ),
                             ),
-
                             const SizedBox(height: 28),
-
-                            /// Bottom Charts
+                            /// Center Charts
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -300,13 +376,147 @@ class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
                                 ),
                               ],
                             ),
+                            ///cards
+                            AirportDashboard()
+
                           ],
                         )
                     ),
                   ),
                 )
-          :
+                    : pageTitles[selectedMenu]=="Revenue Centers"?
                 Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: SingleChildScrollView(
+                        child:Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            /// Top Header
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
+                                    Text(
+                                      "Revenue Centers",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Color(0xFF1D4E89),
+                                      ),
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      "Revenue Centers",
+                                      style: TextStyle(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFF123D6A),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFFFF7A1A),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 16,
+                                    ),
+                                    elevation: 0,
+                                  ),
+                                  onPressed: () {
+                                    showGeneralDialog(
+                                      context: context,
+                                      barrierDismissible: true,
+                                      barrierLabel: "Popup",
+                                      barrierColor: Colors.black54,
+                                      transitionDuration: const Duration(milliseconds: 350),
+                                      pageBuilder: (_, __, ___) {
+                                        return const Align(
+                                          alignment: Alignment.centerRight,
+                                          child: AddAirport(),
+                                        );
+                                      },
+                                      transitionBuilder: (context, animation, secondaryAnimation, child) {
+                                        final offsetAnimation = Tween<Offset>(
+                                          begin: const Offset(1, 0),
+                                          end: Offset.zero,
+                                        ).animate(
+                                          CurvedAnimation(
+                                            parent: animation,
+                                            curve: Curves.easeOut,
+                                          ),
+                                        );
+
+                                        return SlideTransition(
+                                          position: offsetAnimation,
+                                          child: child,
+                                        );
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(Icons.add_circle_outline,color: Colors.white,),
+                                  label: const Text(
+                                    "Add New",
+                                    style: TextStyle(fontSize: 14,color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 24),
+                            /// Stats Cards
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: Row(
+                                children: const [
+                                  Expanded(
+                                    child: StatItem(
+                                      icon: Icons.storefront_outlined,
+                                      title: 'Revenue Centers',
+                                      value: '644',
+                                    ),
+                                  ),
+                                  VerticalDivider(width: 1,),
+                                  Expanded(
+                                    child: StatItem(
+                                      icon: Icons.room_service_outlined,
+                                      title: 'Cuisines',
+                                      value: '24',
+                                    ),
+                                  ),
+                                  VerticalDivider(width: 1,),
+                                  Expanded(
+                                    child: StatItem(
+                                      icon: Icons.restaurant_menu,
+                                      title: 'Concept Type',
+                                      value: '19',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 28),
+                            ///cards
+                            RevenueCenterCards()
+
+                          ],
+                        )
+                    ),
+                  ),
+                )
+                    : pageTitles[selectedMenu]=="Competition Establishments"?
+                Compestablishments()
+                    :  Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(24),
                     child: SingleChildScrollView(

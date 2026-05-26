@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomDropdown extends StatefulWidget {
-  final String label;
+  final String? label;
   final List<String> items;
   final String value;
   final ValueChanged<String> onChanged;
@@ -9,7 +9,7 @@ class CustomDropdown extends StatefulWidget {
 
   const CustomDropdown({
     super.key,
-    required this.label,
+    this.label,
     required this.items,
     required this.value,
     required this.onChanged,
@@ -29,13 +29,13 @@ class _CustomDropdownState extends State<CustomDropdown> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         /// Label
-        Text(
-          widget.label,
+        widget.label!=null?Text(
+          widget.label!,
           style: const TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 16,
           ),
-        ),
+        ):SizedBox(),
 
         const SizedBox(height: 8),
 
@@ -71,7 +71,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                         children: [
                           /// Search Field
                           Container(
-                            height: 48,
+                            height: 35,//48,
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: Colors.grey.shade300,
@@ -139,7 +139,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                                       item,
                                       style:
                                       const TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 14,
                                         color:
                                         Color(0xFF0B2C5F),
                                       ),
@@ -174,9 +174,10 @@ class _CustomDropdownState extends State<CustomDropdown> {
                   color: Colors.blue.shade100,
                 ),
               ),
-              child: Row(
+              child: Row(mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
+                  Flexible(
+                    fit: FlexFit.loose,
                     child: Text(
                       widget.value,
                       style: const TextStyle(

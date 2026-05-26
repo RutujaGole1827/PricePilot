@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'SlideLeftPopup.dart';
+import '../pages/ActivityHistory.dart';
+
 class TopAppBar extends StatefulWidget {
   const TopAppBar({super.key});
 
@@ -196,10 +199,9 @@ class _TopAppBarState extends State<TopAppBar> {
                   ),
                 ),
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Activity Log Opened"),
-                    ),
+                  SlideLeftPopup.show(
+                    context,
+                    content: const HistoryLogContent(),
                   );
                 },
                 icon: const Icon(
