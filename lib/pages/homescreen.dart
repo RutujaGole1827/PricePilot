@@ -10,6 +10,7 @@ import '../components/ReportTable.dart';
 import '../components/dropdown_searchable.dart';
 import 'AirportOverview.dart';
 import 'CompEstablishments.dart';
+import 'PricingAnalytics.dart';
 import 'RevenueCenter.dart';
 
 void main() {
@@ -19,7 +20,7 @@ void main() {
 class PricingApp extends StatelessWidget {
   const PricingApp({super.key});
 
-  @override
+@override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -59,7 +60,67 @@ class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
     "Pricing Analytics",
     "Pricing Reports",
   ];
+  final List<ReportModel> allReports = [
+    ReportModel(
+      airport: "BOS",
+      revenueCenter: "Taco Bell",
+      reviewed: "3 / 3",
+      status: "Completed",
+      analyst: "Rebecca G.",
+      createdBy: "Rebecca G.",
+      createdOn: "02/25/2026",
+      updatedOn: "02/27/2026",
+    ),
+    ReportModel(
+      airport: "ATL",
+      revenueCenter: "Atlanta Bread",
+      reviewed: "2 / 4",
+      status: "In Progress",
+      analyst: "Tara S.",
+      createdBy: "Tara S.",
+      createdOn: "02/21/2026",
+      updatedOn: "02/21/2026",
+    ),
+  ];
 
+  List<ReportModel> filteredReports = [];
+  @override
+  void initState() {
+    super.initState();
+    filteredReports = allReports;
+  }
+
+  void applyFilters(
+      String airport,
+      String status,
+      String analyst,
+      ) {
+    setState(() {
+      filteredReports = allReports.where((report) {
+        final airportMatch =
+            airport == "All" ||
+                report.airport == airport;
+
+        final statusMatch =
+            status == "All" ||
+                report.status == status;
+
+        final analystMatch =
+            analyst == "All" ||
+                report.analyst == analyst;
+
+        return airportMatch &&
+            statusMatch &&
+            analystMatch;
+      }).toList();
+    });
+  }
+
+  void clearFilters() {
+    setState(() {
+      filteredReports = allReports;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     var width= MediaQuery.of(context).size.width;
@@ -78,6 +139,20 @@ class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
                   onMenuSelected: (index) {
                     setState(() {
                       selectedMenu = index;
+                        /// Pricing Analytics opens as separate page
+                        if (menus[index].title == "Pricing Analytics") {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const PricingAnalytics(),
+                            ),
+                          );
+                          return;
+                        }
+
+                        setState(() {
+                          selectedMenu = index;
+                        });
                     });
                   },
                 ),
@@ -516,6 +591,8 @@ class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
                 )
                     : pageTitles[selectedMenu]=="Competition Establishments"?
                 Compestablishments()
+                    : pageTitles[selectedMenu]=="Pricing Analytics"?
+                Expanded(child: PricingAnalytics())
                     :  Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(24),
@@ -524,7 +601,7 @@ class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
                         crossAxisAlignment:
                         CrossAxisAlignment.start,
                         children: [
-                          PageHeading(
+                          /*PageHeading(
                             title: pageTitles[selectedMenu],
                           ),
                           const SizedBox(height: 24),
@@ -532,7 +609,27 @@ class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
                           const SizedBox(height: 24),
                           const FilterSection(),
                           const SizedBox(height: 24),
-                          const ReportTable(),
+                          const ReportTable(),*/
+                      PageHeading(
+                      title: pageTitles[selectedMenu],
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      const HeaderCard(),
+
+                      const SizedBox(height: 24),
+
+                      FilterSection(
+                        onApply: applyFilters,
+                        onClear: clearFilters,
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      ReportTable(
+                        reports: filteredReports,
+                      )
                         ],
                       ),
                     ),
@@ -776,21 +873,25 @@ class HeaderCard extends StatelessWidget {
           ),
 
           ElevatedButton.icon(
+            onPressed: (){ Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const PricingAnalytics(),
+              ),
+            );},
+            icon: const Icon(Icons.auto_awesome,color: Colors.white,),
+            label: const Text("Generate Report"),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xffff7a1a),
+              backgroundColor: Colors.orange,
+              foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(
-                horizontal: 28,
-                vertical: 22,
+                horizontal: 24,
+                vertical: 16,
               ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
+                borderRadius:
+                BorderRadius.circular(12),
               ),
-            ),
-            onPressed: () {},
-            icon: const Icon(Icons.auto_graph),
-            label: const Text(
-              "Generate Report",
-              style: TextStyle(fontSize: 14),
             ),
           )
         ],
@@ -804,7 +905,19 @@ class HeaderCard extends StatelessWidget {
 /// =======================================================
 
 class FilterSection extends StatefulWidget {
-  const FilterSection({super.key});
+  final Function(
+      String airport,
+      String status,
+      String analyst,
+      ) onApply;
+
+  final VoidCallback onClear;
+
+  const FilterSection({
+    super.key,
+    required this.onApply,
+    required this.onClear,
+  });
 
   @override
   State<FilterSection> createState() => _FilterSectionState();
@@ -812,7 +925,10 @@ class FilterSection extends StatefulWidget {
 
 class _FilterSectionState extends State<FilterSection> {
   String selectedAirport = "All";
-  final List<String> airports = [
+  String selectedStatus = "All";
+  String selectedAnalyst = "All";
+
+  final airports = [
     "All",
     "ATL",
     "BOS",
@@ -821,9 +937,22 @@ class _FilterSectionState extends State<FilterSection> {
     "SFO",
   ];
 
+  final statuses = [
+    "All",
+    "Completed",
+    "In Progress",
+  ];
+
+  final analysts = [
+    "All",
+    "Rebecca G.",
+    "Tara S.",
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return Row(crossAxisAlignment: CrossAxisAlignment.end,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Expanded(
           child: CustomDropdown(
@@ -837,30 +966,32 @@ class _FilterSectionState extends State<FilterSection> {
             },
           ),
         ),
+
         const SizedBox(width: 18),
 
         Expanded(
           child: CustomDropdown(
             label: "Status",
-            items: airports,
-            value: selectedAirport,
+            items: statuses,
+            value: selectedStatus,
             onChanged: (value) {
               setState(() {
-                selectedAirport = value;
+                selectedStatus = value;
               });
             },
           ),
         ),
+
         const SizedBox(width: 18),
 
         Expanded(
           child: CustomDropdown(
             label: "Analyst",
-            items: airports,
-            value: selectedAirport,
+            items: analysts,
+            value: selectedAnalyst,
             onChanged: (value) {
               setState(() {
-                selectedAirport = value;
+                selectedAnalyst = value;
               });
             },
           ),
@@ -870,19 +1001,33 @@ class _FilterSectionState extends State<FilterSection> {
 
         ActionButton(
           title: "Apply",
-          backgroundColor:
-          const Color(0xffff7a1a),
+          backgroundColor: const Color(0xffff7a1a),
           textColor: Colors.white,
-          onTap: () {},
+          onTap: () {
+            widget.onApply(
+              selectedAirport,
+              selectedStatus,
+              selectedAnalyst,
+            );
+          },
         ),
+
         const SizedBox(width: 12),
+
         ActionButton(
           title: "Clear All",
           backgroundColor: Colors.white,
           textColor: const Color(0xffff7a1a),
-          borderColor:
-          const Color(0xffff7a1a),
-          onTap: () {},
+          borderColor: const Color(0xffff7a1a),
+          onTap: () {
+            setState(() {
+              selectedAirport = "All";
+              selectedStatus = "All";
+              selectedAnalyst = "All";
+            });
+
+            widget.onClear();
+          },
         ),
       ],
     );

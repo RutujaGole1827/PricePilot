@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SlideLeftPopup {
-  static Future<void> show(
+  static Future<dynamic> show(
       BuildContext context, {
         required Widget content,
         double widthFactor = 0.44,

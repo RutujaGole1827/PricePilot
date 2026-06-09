@@ -376,25 +376,223 @@ class _EditComparableEstablishmentState
                       const SizedBox(height: 24),
 
                       Row(
-                        children: const [
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Expanded(
-                            child: Text(
-                              "Google_Places_ID",
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Color(0xff15355B),
-                                fontWeight: FontWeight.w500,
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "Google_Places_ID",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 12),
+                                Text(
+                                  "ChIJwzRhDOvbmoAR9dxHN5HxqXA",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
+                          SizedBox(width: 40),
                           Expanded(
-                            child: Text(
-                              "Google_Overview",
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Color(0xff15355B),
-                                fontWeight: FontWeight.w500,
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "Google_Overview",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 12),
+                                Text(
+                                  "-",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "Customer Rating",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 12),
+                                Text(
+                                  "-",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 40),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "Price Rating",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 12),
+                                Text(
+                                  "-",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "Latitude *",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 12),
+                                Text(
+                                  "38.5492342",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 40),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "Longitude *",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 12),
+                                Text(
+                                  "-121.4099243",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "Validated Menu Item Count *",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 12),
+                                Text(
+                                  "854",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 40),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "Latitude *",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 12),
+                                Text(
+                                  "38.5492342",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xff15355B),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],

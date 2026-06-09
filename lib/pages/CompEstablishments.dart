@@ -897,7 +897,7 @@ class RestaurantCard extends StatelessWidget {
                 color: const Color(0xff03264c),
                 offset: const Offset(-10, 45),
                 constraints: const BoxConstraints(
-                  minWidth: 240,
+                  minWidth: 120,
                 ),
                 icon: Container(
                   padding: const EdgeInsets.all(6),
