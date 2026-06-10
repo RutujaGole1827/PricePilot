@@ -44,7 +44,7 @@ class PricingDashboardScreen extends StatefulWidget {
 }
 
 class _PricingDashboardScreenState extends State<PricingDashboardScreen> {
-  int selectedMenu = 1;
+  int selectedMenu = 0;
   final List<MenuModel> menus = [
     MenuModel(Icons.flight, "Airports Overview"),
     MenuModel(Icons.attach_money, "Revenue Centers"),
